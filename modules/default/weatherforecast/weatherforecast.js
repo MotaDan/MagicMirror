@@ -294,12 +294,24 @@ Module.register("weatherforecast",{
 		this.fetchedLocatioName = data.city.name + ", " + data.city.country;
 
 		this.forecast = [];
-		for (var i = 0, count = data.list.length; i < count; i++) {
+        for (var i = 0; i < 4; i++)
+        {
+            var forecast = data.list[i];
+            this.forecast.push({
+                day: moment(forecast.dt, "X").format("ddd, hA"),
+                icon: this.config.iconTable[forecast.weather[0].icon],
+                maxTemp: this.roundValue(forecast.main.temp_max),
+                minTemp: this.roundValue(forecast.main.temp_min),
+                rain: this.roundValue(forecast.rain)
+            });
+        }
+        
+		for (var i = 7, count = data.list.length; i < count; i+=4) {
 
 			var forecast = data.list[i];
 			this.forecast.push({
 
-				day: moment(forecast.dt, "X").format("ddd"),
+				day: moment(forecast.dt, "X").format("ddd, hA"),
 				icon: this.config.iconTable[forecast.weather[0].icon],
 				maxTemp: this.roundValue(forecast.temp.max),
 				minTemp: this.roundValue(forecast.temp.min),
